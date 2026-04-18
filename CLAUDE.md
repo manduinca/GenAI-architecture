@@ -25,7 +25,9 @@ All course content is written in Spanish.
 
 ## Slides format
 
-All slides are authored in **LaTeX / Beamer**.
+- **Stack**: Beamer + `metropolis` theme + `xelatex` + `listings` (aspectratio 16:9).
+- **Location**: `clase-N/slides/main.tex`.
+- **Build**: `cd clase-N/slides && make pdf` (o `make watch` con `latexmk` para recompilación continua).
 
 ## Teaching posture
 

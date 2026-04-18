@@ -1,0 +1,306 @@
+% =======================================================================
+% Clase 1 — Arquitectura IA Generativa y el Ecosistema LLM
+% Curso de IA Generativa · EscuelaIT · Abril 2026
+% Compilación: make pdf   (xelatex)
+% =======================================================================
+
+\documentclass[aspectratio=169,11pt]{beamer}
+\usetheme[progressbar=frametitle, sectionpage=progressbar, numbering=fraction]{metropolis}
+
+% --------- Idioma y fuentes (xelatex) ---------
+\usepackage{polyglossia}
+\setmainlanguage{spanish}
+\usepackage{fontspec}
+
+% --------- Paquetes ---------
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows.meta, positioning, fit, backgrounds}
+\usepackage{listings}
+\usepackage{hyperref}
+\usepackage{fontawesome5}
+
+% --------- Colores ---------
+\definecolor{mBlue}{HTML}{1976D2}
+\definecolor{mRed}{HTML}{D32F2F}
+\definecolor{mGreen}{HTML}{388E3C}
+\definecolor{mOrange}{HTML}{F57C00}
+\definecolor{mGray}{HTML}{616161}
+\definecolor{mLightGray}{HTML}{EEEEEE}
+\definecolor{mCodeBg}{HTML}{FAFAFA}
+\definecolor{usaColor}{HTML}{1976D2}
+\definecolor{chinaColor}{HTML}{D32F2F}
+
+% --------- Listings / código ---------
+\lstdefinestyle{pystyle}{
+  backgroundcolor=\color{mCodeBg},
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{mBlue}\bfseries,
+  stringstyle=\color{mGreen},
+  commentstyle=\color{mGray}\itshape,
+  numbers=none,
+  showstringspaces=false,
+  frame=leftline,
+  rulecolor=\color{mBlue},
+  breaklines=true,
+  language=Python,
+  columns=fullflexible,
+  keepspaces=true
+}
+\lstdefinestyle{bashstyle}{
+  backgroundcolor=\color{mCodeBg},
+  basicstyle=\ttfamily\scriptsize,
+  keywordstyle=\color{mBlue}\bfseries,
+  commentstyle=\color{mGray}\itshape,
+  numbers=none,
+  showstringspaces=false,
+  frame=leftline,
+  rulecolor=\color{mOrange},
+  breaklines=true,
+  language=bash,
+  columns=fullflexible,
+  keepspaces=true
+}
+\lstset{style=pystyle}
+
+% --------- Metadata ---------
+\title{Arquitectura IA Generativa y el Ecosistema LLM}
+\subtitle{Clase 1 de 5 · Curso de IA Generativa}
+\author{Jean Pierre Mandujano}
+\institute{EscuelaIT}
+\date{Abril 2026}
+
+% --------- Helpers ---------
+\newcommand{\hl}[1]{\textcolor{mBlue}{\textbf{#1}}}
+\newcommand{\flag}[1]{\textcolor{#1}{\faFlag}}
+
+% =======================================================================
+\begin{document}
+
+% ----------------------------------------- Portada
+\maketitle
+
+% ----------------------------------------- Bloque 0 · Apertura
+\section{Apertura}
+
+\begin{frame}{Antes de empezar — una demo}
+  \begin{center}
+    \vspace{0.5cm}
+    {\Large \textbf{peru-elecciones.deepskill.space}}\\[0.6cm]
+    {\large Asistente IA sobre datos oficiales de la ONPE}\\[1cm]
+    \begin{tikzpicture}
+      \node[draw=mBlue, thick, rounded corners, minimum width=10cm, minimum height=2.5cm, fill=mLightGray] (box) {
+        \begin{minipage}{9.5cm}\centering
+          \textit{"¿Quién va segundo en Lima?"}\\
+          \textit{"¿Cuánta participación hay en el norte?"}\\
+          \textit{"Dame los partidos con más crecimiento en las últimas 2 horas"}
+        \end{minipage}
+      };
+    \end{tikzpicture}\\[0.6cm]
+    \small \textcolor{mGray}{Al terminar este curso, sabrán construir esto — y mejor.}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Nosotros ya somos usuarios de software con IA}
+  \small
+  \begin{tikzpicture}[node distance=0.15cm, every node/.style={font=\small}]
+    \node[draw=mGray, rounded corners, fill=mLightGray, minimum width=2.2cm, minimum height=1.3cm, align=center] (n1) {\textbf{2022}\\ChatGPT\\(navegador)};
+    \node[draw=mGray, rounded corners, fill=mLightGray, minimum width=2.2cm, minimum height=1.3cm, align=center, right=of n1] (n2) {\textbf{2023}\\Copilot\\in-line};
+    \node[draw=mGray, rounded corners, fill=mLightGray, minimum width=2.2cm, minimum height=1.3cm, align=center, right=of n2] (n3) {\textbf{2024}\\Cursor /\\Windsurf};
+    \node[draw=mBlue, thick, rounded corners, fill=mLightGray, minimum width=2.2cm, minimum height=1.3cm, align=center, right=of n3] (n4) {\textbf{2025}\\Claude Code\\Codex · Qwen};
+    \node[draw=mBlue, thick, rounded corners, fill=mBlue!10, minimum width=2.2cm, minimum height=1.3cm, align=center, right=of n4] (n5) {\textbf{2026}\\IDE orquesta\\agentes · ACP};
+
+    \draw[->, thick, mGray] (n1) -- (n2);
+    \draw[->, thick, mGray] (n2) -- (n3);
+    \draw[->, thick, mGray] (n3) -- (n4);
+    \draw[->, thick, mBlue] (n4) -- (n5);
+  \end{tikzpicture}
+
+  \vspace{0.7cm}
+  \begin{center}
+    \begin{minipage}{0.85\textwidth}\centering
+      \small El mismo tipo de software que ya usamos como desarrolladores\\
+      es lo que vamos a construir \textbf{para nuestros usuarios}.
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Marco mental del curso — tres capas}
+  \centering
+  \begin{tikzpicture}[
+    every node/.style={font=\small, align=center},
+    layer/.style={draw, rounded corners, minimum width=10cm, minimum height=1.4cm, thick}
+  ]
+    \node[layer, fill=mBlue!15, draw=mBlue] (l1) {\textbf{Software que administra}\\
+      \footnotesize tu app · Cursor · Claude Code · peru-elecciones};
+    \node[layer, fill=mOrange!15, draw=mOrange, below=0.4cm of l1] (l2) {\textbf{Capa agéntica}\\
+      \footnotesize loops · tools · memoria · MCP · orquestación · guardrails};
+    \node[layer, fill=mGreen!15, draw=mGreen, below=0.4cm of l2] (l3) {\textbf{LLM base}\\
+      \footnotesize Claude · GPT · Gemini · DeepSeek · Qwen · GLM · Kimi\dots};
+
+    \draw[->, thick] (l1) -- (l2);
+    \draw[->, thick] (l2) -- (l3);
+  \end{tikzpicture}
+
+  \vspace{0.4cm}
+  \small \textcolor{mGray}{Columna vertebral conceptual del curso entero. Volvemos varias veces.}
+\end{frame}
+
+\begin{frame}{El curso — 5 clases de 90 min}
+  \small
+  \begin{center}
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}rl@{}}
+    \toprule
+    \textbf{Clase 1} & Arquitectura IA Generativa y el Ecosistema LLM \textit{(hoy)} \\
+    \textbf{Clase 2} & Prompt Engineering como sistema \\
+    \textbf{Clase 3} & Patrones de arquitectura con LLMs (RAG, orquestación, memoria) \\
+    \textbf{Clase 4} & Construcción de aplicaciones LLM \\
+    \textbf{Clase 5} & Despliegue y producción \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+
+  \vspace{0.7cm}
+  \begin{center}
+    \begin{minipage}{0.8\textwidth}\centering
+      \small Hoy: \textbf{el mapa del territorio}. Las 4 clases siguientes: construir.
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+% ----------------------------------------- Bloque 1 · Fundamentos
+\section{Fundamentos}
+
+\begin{frame}{¿Qué es un LLM?}
+  \small
+  Red neuronal profunda (arquitectura \hl{Transformer}) entrenada sobre billones de tokens con un objetivo autosupervisado: \textbf{predecir el siguiente token}.
+
+  \vspace{0.4cm}
+  \begin{center}
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{@{}p{4.2cm} p{4.5cm} p{4.5cm}@{}}
+    \toprule
+     & \textbf{ML clásico} & \textbf{LLM / fundacional} \\
+    \midrule
+    Modelo por tarea & uno por tarea & uno para cientos \\
+    Cómo se adapta & fine-tuning específico & prompting en lenguaje natural \\
+    Datos & etiquetados + features & texto crudo \\
+    Al escalar & se satura & sigue leyes de potencia \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+
+  \vspace{0.3cm}
+  \begin{center}
+    \textcolor{mBlue}{\textit{Ya no entrenamos modelos. Los consumimos como infraestructura.}}
+  \end{center}
+\end{frame}
+
+\begin{frame}{El Transformer en una idea}
+  \small
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \textbf{Tres conceptos:}
+      \begin{enumerate}
+        \item \hl{Tokenización} — el texto se parte en subpalabras.
+        \item \hl{Self-attention} — cada token mira a todos los demás en paralelo.
+        \item \hl{Autoregresivo} — predice un token, lo concatena, repite.
+      \end{enumerate}
+      \vspace{0.3cm}
+      \textit{"Una mesa redonda donde cada palabra escucha a todas las demás antes de hablar."}
+    \end{column}
+    \begin{column}{0.45\textwidth}
+      \centering
+      \begin{tikzpicture}[scale=0.85, every node/.style={font=\scriptsize}]
+        \foreach \i/\w in {0/Hola,1/{¿cómo},2/estás,3/hoy}
+          \node[draw=mBlue, rounded corners, minimum width=1.1cm, minimum height=0.5cm, fill=mBlue!10] (t\i) at (\i*1.3, 0) {\w};
+        \foreach \i/\j in {0/1,0/2,0/3,1/2,1/3,2/3}
+          \draw[-, mBlue!40, thin] (t\i) to [bend left=35] (t\j);
+        \node[above=0.9cm of t1.north east, anchor=south, font=\scriptsize\itshape, text=mGray] {self-attention};
+      \end{tikzpicture}
+      \vspace{0.3cm}
+      \textcolor{mGray}{\scriptsize Vaswani et al., \textit{Attention Is All You Need} (2017)}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Chat vs razonador — la distinción de 2025-2026}
+  \small
+  \begin{center}
+  \renewcommand{\arraystretch}{1.2}
+  \begin{tabular}{@{}p{3.3cm} p{5cm} p{5cm}@{}}
+    \toprule
+     & \textbf{Modelo chat} & \textbf{Modelo razonador} \\
+    \midrule
+    Ejemplos & GPT-4o, Sonnet, Flash, V3 & o-series, Opus w/ thinking, R1, GLM-5.1 \\
+    Cómo responde & un forward pass & cadena de razonamiento larga antes \\
+    Latencia a 1er token & 200--500 ms & 30--180 segundos \\
+    Coste & bajo & alto (los tokens de thinking se facturan) \\
+    Bueno en & chat, extracción, RAG, clasificación & matemáticas, coding agéntico, planning \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+
+  \vspace{0.4cm}
+  \begin{center}
+    \begin{minipage}{0.85\textwidth}\centering
+      \small Los razonadores escalan en \textbf{tiempo de inferencia}. En 2026 casi todos los\\frontier ofrecen variantes razonadoras.
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Tres límites duros que no se pueden ignorar}
+  \small
+  \begin{center}
+  \renewcommand{\arraystretch}{1.35}
+  \begin{tabular}{@{}p{3.8cm} p{5cm} p{4.4cm}@{}}
+    \toprule
+    \textbf{Límite} & \textbf{Qué pasa} & \textbf{Mitigación} \\
+    \midrule
+    \hl{Alucinación} & genera plausibilidad, no verdad & RAG, tool use, verificación \\
+    \hl{Conocimiento congelado} & no sabe lo posterior a su cutoff & búsqueda web, RAG fresco \\
+    \hl{Cálculo / consistencia} & falla en aritmética y contextos largos & code interpreter, memoria explícita \\
+    \bottomrule
+  \end{tabular}
+  \end{center}
+
+  \vspace{0.6cm}
+  \begin{center}
+    \begin{minipage}{0.85\textwidth}\centering
+      \textcolor{mBlue}{\textit{Estos límites \textbf{no son bugs a corregir}.\\Son la razón de que exista el resto del curso.}}
+    \end{minipage}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Recordatorio — tres capas}
+  \centering
+  \begin{tikzpicture}[
+    every node/.style={font=\small, align=center},
+    layer/.style={draw, rounded corners, minimum width=9.5cm, minimum height=1.2cm, thick}
+  ]
+    \node[layer, fill=mBlue!15, draw=mBlue] (l1) {\textbf{Software que administra}};
+    \node[layer, fill=mOrange!15, draw=mOrange, below=0.3cm of l1] (l2) {\textbf{Capa agéntica} \footnotesize (loops, tools, memoria, MCP)};
+    \node[layer, fill=mGreen!15, draw=mGreen, below=0.3cm of l2] (l3) {\textbf{LLM base}};
+  \end{tikzpicture}
+
+  \vspace{0.6cm}
+  \small El curso enseña a construir \textbf{capa 2} y \textbf{capa 1}, consumiendo capa 3 como commodity.
+
+  \vspace{0.3cm}
+  \textcolor{mGray}{\footnotesize Explicará, por ejemplo, por qué el chat de un proveedor hace cosas que su API no hace.}
+\end{frame}
+
+% =======================================================================
+% PENDIENTE DE GENERAR:
+%   Bloque 2 — Tokens, contexto y límites (~5 slides)
+%   Bloque 3 — Proveedores (top 9, Llama vs chinos, chat vs API, self-host, descarga) (~10 slides)
+%   Bloque 4 — Frameworks y protocolos (MCP, ACP, OAuth) (~5 slides)
+%   Bloque 5 — APIs chat completions + demo base_url (~6 slides)
+%   Cierre — 3 take-aways + preview + Q&A (~3 slides)
+% =======================================================================
+
+\end{document}
