@@ -40,10 +40,20 @@ Cada clase se organiza así:
 ```
 clase-N/
 ├── README.md              # índice y estructura 90 min
-├── clase-N-completa.md    # guion maestro (texto completo para revisar con el instructor)
-├── contenido/             # dossiers de investigación por bloque
+├── clase-N-completa.md    # guion maestro (opcional)
+├── contenido/             # dossiers de investigación por bloque (opcional)
+├── slides/                # Beamer (opcional, ver § Slides format)
+├── notebook/              # Jupyter práctico (opcional, ver § Notebook format)
 └── referencias.md         # bibliografía de la clase
 ```
+
+## Notebook format
+
+Para clases prácticas con demos en vivo ejecutadas por el instructor:
+
+- **Ubicación**: `clase-N/notebook/` (p. ej. `prompting.ipynb`).
+- **Stack**: `openai` SDK apuntando a `api.deepseek.com` (patrón OpenAI-compatible). `requirements.txt` + venv local en `.venv/`.
+- **Credenciales**: `.env` en gitignore, `.env.example` versionado. La `DEEPSEEK_API_KEY` puede reutilizarse de `peru-elecciones/.env`.
 
 ## Volatile data
 
