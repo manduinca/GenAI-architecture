@@ -10,7 +10,7 @@ This repository contains course materials for "Arquitectura de Aplicaciones con 
 
 - **Clase 1**: Fundamentos de IA Generativa y Ecosistema LLM
 - **Clase 2**: Prompt Engineering como Sistema
-- **Clase 3**: Patrones de Arquitectura con LLMs (RAG, orquestación, memoria)
+- **Clase 3**: RAG — *retrieval augmented generation* (embeddings, similitud coseno, vector stores, chunking, modos de fallo)
 - **Clase 4**: Construcción de Aplicaciones LLM
 - **Clase 5**: Despliegue y Producción
 
@@ -51,8 +51,9 @@ clase-N/
 
 Para clases prácticas con demos en vivo ejecutadas por el instructor:
 
-- **Ubicación**: `clase-N/notebook/` (p. ej. `prompting.ipynb`).
-- **Stack**: `openai` SDK apuntando a `api.deepseek.com` (patrón OpenAI-compatible). `requirements.txt` + venv local en `.venv/`.
+- **Ubicación de los notebooks**: `clase-N/notebook/` (p. ej. `prompting.ipynb`, `01-conceptos.ipynb`).
+- **Stack**: `openai` SDK apuntando a `api.deepseek.com` (patrón OpenAI-compatible).
+- **Infra compartida entre clases (en el raíz del curso)**: `requirements.txt` (unión de deps), `.env` (credenciales), `.venv/` (único entorno para todas las clases). `python-dotenv` busca `.env` hacia arriba, así que los notebooks funcionan sin cambios.
 - **Credenciales**: `.env` en gitignore, `.env.example` versionado. La `DEEPSEEK_API_KEY` puede reutilizarse de `peru-elecciones/.env`.
 
 ## Volatile data

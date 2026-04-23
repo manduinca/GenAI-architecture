@@ -33,12 +33,17 @@ Al terminar la sesión, el asistente debe ser capaz de:
 
 ## Setup
 
+El entorno es **compartido entre todas las clases del curso** (venv, `.env` y `requirements.txt` viven en el raíz). Si ya lo preparaste para otra clase, salta a `jupyter lab`.
+
 ```bash
-cd clase-2/notebook
+# Desde la raíz del curso — una sola vez
+cd /path/to/GenAI-architecture
 python -m venv .venv && source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env   # y completa DEEPSEEK_API_KEY
-jupyter lab prompting.ipynb
+
+# Para esta clase
+jupyter lab clase-2/notebook/prompting.ipynb
 ```
 
 ---

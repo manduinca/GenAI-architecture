@@ -1,0 +1,7 @@
+.env
+.venv/
+.ipynb_checkpoints/
+__pycache__/
+
+# Clase 3 — base SQLite generada por el demo RAG
+clase-3/notebook/rag.db
