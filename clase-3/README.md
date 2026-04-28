@@ -61,7 +61,7 @@ La primera ejecución de la demo descarga el modelo de embeddings MiniLM (~420 M
 
 1. **RAG no es magia: es búsqueda semántica + inyección de contexto en el prompt.** Todo lo demás son detalles de ingeniería (chunking, vector store, reranking).
 2. **La elección entre prompting, RAG y fine-tuning es arquitectónica, no técnica.** Depende de cuánto cambia el conocimiento, cuánto cuesta cada llamada y qué tipo de tarea resuelves.
-3. **Lo que construimos hoy vive en los sistemas reales.** El núcleo de antapaccay-demo es este mismo patrón más retrieval híbrido, reranking y citaciones.
+3. **Lo que construimos hoy vive en los sistemas reales.** El núcleo de yana-killa-demo es este mismo patrón más retrieval híbrido, reranking y citaciones.
 
 ---
 
@@ -74,4 +74,4 @@ La primera ejecución de la demo descarga el modelo de embeddings MiniLM (~420 M
 
 ## Proyecto de referencia
 
-El stack de la demo (SQLite + `sentence-transformers` + LLM agnóstico) es una versión didáctica simplificada del que usa `/Users/manduinca/Projects/deepskill/antapaccay-demo` en producción. Allí se añaden: extensión `sqlite-vec` para búsqueda vectorial nativa, BM25 + RRF para retrieval híbrido, y `pymupdf4llm` para ingesta de PDFs.
+El stack de la demo (SQLite + `sentence-transformers` + LLM agnóstico) es una versión didáctica simplificada del que usa `yana-killa-demo` en producción. Allí se añaden: extensión `sqlite-vec` para búsqueda vectorial nativa, BM25 + RRF para retrieval híbrido, y `pymupdf4llm` para ingesta de PDFs.
